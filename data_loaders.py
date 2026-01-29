@@ -6,7 +6,7 @@ from collections import OrderedDict
 import inspect
 
 from sp_tool.arff_helper import ArffHelper
-import util
+from sp_tool import util
 
 EM_VALUE_MAPPING_DEFAULT = {
     0: 'UNKNOWN',
@@ -74,7 +74,7 @@ def load_ARFF_as_arff_object(fname, eye_movement_type_attribute=None, eye_moveme
         if eye_movement_type_mapping_dict is None:
             # Check if the column is not yet of the right format.
             # Only need to do this if the attribute is numerical, not categorical!
-            if arff_obj['data'][eye_movement_type_attribute].dtype.type is not np.string_:
+            if arff_obj['data'][eye_movement_type_attribute].dtype.type is not np.str_:
                 correct_flag = all([item in EM_TYPE_ARFF_DATA_TYPE
                                     for item in arff_obj['data'][eye_movement_type_attribute]])
             else:  # nothing to do here, already a categorical attribute

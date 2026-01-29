@@ -227,4 +227,17 @@ if __name__ == '__main__':
         print(stats)
     else:
         import json
-        print(json.dumps(stats, sort_keys=True, separators=(',', ': '), indent=4))
+
+        def convert_dict(d):
+            """
+            Quickly implemented function to convert the Numpy floats
+            and ints in the dict to Python ones
+            """
+            return {
+                k: val.item() if getattr(val, "item", None) is not None
+                else (convert_dict(val)
+                      if isinstance(val, dict) else val)
+                for k, val in d.items()
+            }
+
+        print(json.dumps(convert_dict(stats), sort_keys=True, separators=(',', ': '), indent=4))

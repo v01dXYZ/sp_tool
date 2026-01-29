@@ -48,7 +48,7 @@ def get_majority_vote_efficient(obj, experts, positive_label):
     label_dtype = obj['data'][experts[0]].dtype
     if len(experts) == 1:
         # just one expert, he always agrees with himself
-        if label_dtype.type is np.string_:
+        if label_dtype.type is np.str_:
             # ground truth labels are already strings, no need for conversion
             return obj['data'][experts[0]] == positive_label
         else:  # ground truth labels are not strings, convert using the standard dictionary
@@ -57,7 +57,7 @@ def get_majority_vote_efficient(obj, experts, positive_label):
         hand_labellings = obj['data'][experts]
         hand_labellings_list = hand_labellings.view((label_dtype, len(hand_labellings.dtype.names)))
         thd = len(experts) / 2.0  # at least 50% of experts should agree
-        if label_dtype.type is np.string_:
+        if label_dtype.type is np.str_:
             majority_vote = ((hand_labellings_list == positive_label).sum(axis=1) >= thd).astype(int)
         else:
             majority_vote = ((hand_labellings_list ==
@@ -84,7 +84,7 @@ def get_majority_vote(obj, experts, exclude_values=None):
     label_dtype = obj['data'][experts[0]].dtype
 
     if len(experts) == 1:
-        return obj['data'][experts].astype(label_dtype if label_dtype.type is np.string_ else int)
+        return obj['data'][experts].astype(label_dtype if label_dtype.type is np.str_ else int)
     else:
         if exclude_values is not None:
             if not isinstance(exclude_values, list):
@@ -101,7 +101,7 @@ def get_majority_vote(obj, experts, exclude_values=None):
             if not candidates_set:
                 candidates_set = set(hand_labellings[i])
             majority_vote.append(max(candidates_set, key=hand_labellings[i].count))
-        majority_vote = np.asarray(majority_vote, dtype=label_dtype if label_dtype.type is np.string_ else np.int)
+        majority_vote = np.asarray(majority_vote, dtype=label_dtype if label_dtype.type is np.str_ else np.int)
 
         return majority_vote
 
@@ -880,7 +880,7 @@ def evaluate_episodes_as_Hoppe_et_al(true_labels_list, assigned_labels_list, exp
     [2] https://arxiv.org/abs/1609.02452
     """
     # get all possible labels for the confusion matrix
-    if len(true_labels_list) > 0 and true_labels_list[0]['data'][experts[0]].dtype.type is not np.string_:
+    if len(true_labels_list) > 0 and true_labels_list[0]['data'][experts[0]].dtype.type is not np.str_:
         # dealing with non-categorical labels, use standard order of labels
         labels = ['FIX', 'SACCADE', 'SP', 'NOISE']
     else:
